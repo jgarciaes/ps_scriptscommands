@@ -1,0 +1,28 @@
+#Get Firewall rules filtered by port 
+
+$port = ''
+
+Get-NetFirewallPortFilter |
+    Where-Object { $_.LocalPort -match $port } |
+    ForEach-Object {
+        "----"
+        "Rule"
+        "----"
+        $_ | Get-NetFirewallRule
+        "-----------"
+        "Port Filter"
+        "-----------"
+        $_
+    }
+
+
+#Create Firewall rule 
+
+# Combine the port ranges into a single string with a comma separator
+$ports = '', ''  # 80 1000-1000 '1000-1002', '1299-3000'  
+$rule_name= ''   # name should be something related to the rule 
+$direction= ''   # Outbound, Inbound
+$action= ''      # Allow, Block
+$program= ''     # any program, or specific program (pass the program path)
+
+New-NetFirewallRule -DisplayName $rule_name -Direction $direction -Action $action -Program Any -LocalPort $ports -Protocol TCP
