@@ -1,0 +1,7 @@
+$eventIDs = @(41, 42, 109, 12, 13, 37, 45)
+$lastDays = 3
+$providerName = 'Microsoft-Windows-Kernel-General'
+$endDate = Get-Date
+$startDate = $endDate.AddDays(-$lastDays)
+
+Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName= $providerName; ID=$eventIDs; StartTime=$startDate; EndTime=$endDate} | Select-Object TimeCreated, ProviderName, Id, Message
