@@ -1,0 +1,26 @@
+# Define the name of the application pool
+$appPoolName = ""
+
+# Define the log name and event levels to filter
+$logName = "Application"
+$eventLevels = 2, 3  # 2 corresponds to Error events, 3 corresponds to Warning events
+
+# Define the time range for the events (last hour)
+$startTime = (Get-Date).AddHours(-1)
+$endTime = Get-Date
+
+# Get the event log entries for the specified application pool within the time range
+$events = Get-WinEvent -FilterHashtable @{
+    LogName = $logName
+    Level = $eventLevels
+    StartTime = $startTime
+    EndTime = $endTime
+} | Where-Object {$_.Message -like "*$appPoolName*"}
+
+# Display the error and warning events with their descriptions
+foreach ($event in $events) {
+    Write-Host "Event ID: $($event.Id)"
+    Write-Host "Level: $($event.LevelDisplayName)"
+    Write-Host "Message: $($event.Message)"
+    Write-Host "----------------------------------"
+}
