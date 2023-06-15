@@ -17,13 +17,13 @@ function ShowEventDetails($event) {
     Write-Host "-----"
 }
 
-# Get error and warning events from System log
+# Get error and warning events from System log and sort by timestamp
 $systemEvents = Get-WinEvent -FilterHashtable @{
     LogName   = 'System'
     Level     = 2, 3  # 2 - Error, 3 - Warning
     StartTime = $startTime
     EndTime   = $endTime
-}
+} | Sort-Object TimeCreated
 
 # Display System events
 if ($systemEvents) {
@@ -35,13 +35,13 @@ if ($systemEvents) {
     Write-Host "No System error or warning events found between 1 AM and 5 AM today."
 }
 
-# Get error and warning events from Application log
+# Get error and warning events from Application log and sort by timestamp
 $applicationEvents = Get-WinEvent -FilterHashtable @{
     LogName   = 'Application'
     Level     = 2, 3  # 2 - Error, 3 - Warning
     StartTime = $startTime
     EndTime   = $endTime
-}
+} | Sort-Object TimeCreated
 
 # Display Application events
 if ($applicationEvents) {
@@ -53,13 +53,13 @@ if ($applicationEvents) {
     Write-Host "No Application error or warning events found between 1 AM and 5 AM today."
 }
 
-# Get error and warning events from Custom Views log
+# Get error and warning events from Custom Views log and sort by timestamp
 $customViewsEvents = Get-WinEvent -FilterHashtable @{
     LogName   = 'Custom Views'
     Level     = 2, 3  # 2 - Error, 3 - Warning
     StartTime = $startTime
     EndTime   = $endTime
-}
+} | Sort-Object TimeCreated
 
 # Display Custom Views events
 if ($customViewsEvents) {
