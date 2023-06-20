@@ -1,0 +1,32 @@
+$items = Get-ChildItem | ForEach-Object {
+    $size = (Get-ChildItem -Recurse -File $_.FullName | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
+    $sizeFormatted = "{0:N2}" -f ($size / 1MB)
+    $unit = "MB"
+    
+    if ($size -ge 1GB) {
+        $sizeFormatted = "{0:N2}" -f ($size / 1GB)
+        $unit = "GB"
+    } elseif ($size -lt 1MB) {
+        $sizeFormatted = "{0:N2}" -f ($size / 1KB)
+        $unit = "KB"
+    }
+    
+    [PSCustomObject]@{
+        Name = $_.Name
+        Size = $sizeFormatted
+        Unit = $unit
+    }
+} 
+
+$totalSize = ($items | Measure-Object -Property Size -Sum).Sum
+$totalSizeFormatted = "{0:N2}" -f ($totalSize)
+
+$items | Sort-Object {[double]($_.Size -replace ',', '.')}, Name | ForEach-Object {
+    $namePadding = '{0,-40}' -f $_.Name
+    $sizeFormatted = '{0,8} {1}' -f $_.Size, $_.Unit
+    $namePadding + $sizeFormatted
+}
+
+Write-Host
+Write-Host "Total"
+Write-Host ("{0,-40} {1,8} KB" -f "total", $totalSizeFormatted)
