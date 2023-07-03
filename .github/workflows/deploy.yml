@@ -1,14 +1,30 @@
-name: Obtener IP
+name: Build y Envío a Docker Hub
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  get-ip:
-    runs-on: windows-latest
-    
+  build-and-push:
+    runs-on: ubuntu-latest
+
     steps:
-    - name: Obtener IP
-      run: |
-        $response = Invoke-WebRequest -Uri "https://ifconfig.co"
-        $ip = $response.Content
-        Write-Host "Mi dirección IP es $ip"
+      - name: Checkout del código fuente
+        uses: actions/checkout@v2
+
+      - name: Login a Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PWD }}
+
+      - name: Build y etiquetar imagen
+        run: |
+          docker build -t jonathangarciaes/test:latest .
+          docker build -t jonathangarciaes/test:${{ github.sha }} .
+        
+      - name: Push de la imagen a Docker Hub
+        run: |
+          docker push jonathangarciaes/test:latest
+          docker push jonathangarciaes/test:${{ github.sha }}
