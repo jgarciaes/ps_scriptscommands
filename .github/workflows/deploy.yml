@@ -1,0 +1,35 @@
+name: Despliegue en Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout del código fuente
+      uses: actions/checkout@v2
+      
+    - name: Configurar Docker
+      uses: docker/setup-docker@v2
+      
+    - name: Construir y etiquetar imagen
+      run: docker build -t mi-imagen:latest .
+      
+    - name: Iniciar Docker Desktop
+      run: |
+        docker run --name docker-desktop --detach ^
+        -v \\.\pipe\docker_engine:\\.\pipe\docker_engine ^
+        -v \\.\pipe\docker_wsl_integration:\\.\pipe\docker_wsl_integration ^
+        -v \\.\pipe\docker_wsl_cli:\\.\pipe\docker_wsl_cli ^
+        -e COMPOSE_CONVERT_WINDOWS_PATHS=1 ^
+        docker/desktop:windows-amd64
+
+    - name: Desplegar contenedor
+      run: |
+        docker stop mi-contenedor || true
+        docker rm mi-contenedor || true
+        docker run -d --name mi-contenedor -p 80:80 mi-imagen:latest
