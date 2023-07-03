@@ -9,4 +9,6 @@ jobs:
     steps:
     - name: Obtener IP
       run: |
-        echo "Mi dirección IP es $(curl -s ifconfig.co)"
+        $response = Invoke-WebRequest -Uri "https://ifconfig.co"
+        $ip = $response.Content
+        Write-Host "Mi dirección IP es $ip"
