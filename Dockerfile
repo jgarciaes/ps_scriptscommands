@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/powershell:latest
 
 # Copiar los scripts de PowerShell al contenedor
-COPY ps_scriptscommands /scripts
+COPY . /scripts
 
 # Establecer el directorio de trabajo
 WORKDIR /scripts
