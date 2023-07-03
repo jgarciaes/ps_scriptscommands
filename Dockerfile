@@ -7,5 +7,5 @@ COPY . /scripts
 # Establecer el directorio de trabajo
 WORKDIR /scripts
 
-# Comando de inicio vacío
-CMD [""]
+# Comando de inicio (se puede ajustar según tus necesidades)
+CMD ["pwsh", "-NoExit"]
