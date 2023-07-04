@@ -8,4 +8,4 @@ COPY . /scripts
 WORKDIR /scripts
 
 # Comando de inicio (se puede ajustar según tus necesidades)
-CMD ["ls", "l"]
+CMD ["ls"]
