@@ -8,4 +8,4 @@ COPY . /scripts
 WORKDIR /scripts
 
 # Comando de inicio (se puede ajustar según tus necesidades)
-CMD ["pwsh", "-NoExit"]
+CMD ["ls", "l"]
