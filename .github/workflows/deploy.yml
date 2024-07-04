@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    environment: test
 
     steps:
       - name: Checkout del código fuente
@@ -28,3 +29,9 @@ jobs:
         run: |
           docker push jonathangarciaes/test:latest
           docker push jonathangarciaes/test:${{ github.sha }}
+  dep:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v2
