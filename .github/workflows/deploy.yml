@@ -6,7 +6,14 @@ on:
       - main
 
 jobs:
+  start-deployment:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Approval step
+        run: echo "Approval required"
   build-and-push:
+    needs: start-deployment
     runs-on: ubuntu-latest
     environment: test
 
